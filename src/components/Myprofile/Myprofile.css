@@ -1,0 +1,16 @@
+.myprofile_container {
+  width: min-content;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.button_wrapper {
+  width: 100%;
+  height: 100px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  margin-top: 50px;
+}
