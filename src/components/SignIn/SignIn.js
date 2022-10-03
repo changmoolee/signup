@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import "./SignIn.css";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 import { TextInput, Button } from "joseph-ui-kit";
+import { useLoginUserMutation } from "../../services/user";
 
 const SignIn = ({ setIsLogIn }) => {
   const [userId, setUserId] = useState("");
@@ -25,6 +25,8 @@ const SignIn = ({ setIsLogIn }) => {
     navigate("/signup");
   };
 
+  const [loginUser] = useLoginUserMutation();
+
   const handleClickButton = async () => {
     if (userId.length === 0) {
       setWarnUserId("아이디를 입력해 주세요.");
@@ -32,11 +34,8 @@ const SignIn = ({ setIsLogIn }) => {
       setWarnUserId("");
       setWarnPassword("비밀번호를 입력해 주세요.");
     } else {
-      await axios
-        .post(`${process.env.REACT_APP_API_URL}/user/userLogIn`, {
-          id: userId,
-          password: password,
-        })
+      loginUser({ userId, password })
+        .unwrap()
         .then(() => {
           alert("정상적으로 로그인이 되었습니다.");
           goToMyProfile();
@@ -46,6 +45,20 @@ const SignIn = ({ setIsLogIn }) => {
           alert("로그인에 실패하였습니다.");
           console.log(err);
         });
+      // await axios
+      //   .post(`${process.env.REACT_APP_API_URL}/user/userLogIn`, {
+      //     id: userId,
+      //     password: password,
+      //   })
+      //   .then(() => {
+      //     alert("정상적으로 로그인이 되었습니다.");
+      //     goToMyProfile();
+      //     setIsLogIn(true);
+      //   })
+      //   .catch((err) => {
+      //     alert("로그인에 실패하였습니다.");
+      //     console.log(err);
+      //   });
     }
   };
 
