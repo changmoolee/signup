@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import "./Userlist.css";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 import { DataTable, Button } from "joseph-ui-kit";
 import convertUserlist from "../../utils/convertUserlist";
+import { useGetUserlistQuery } from "../../services/user";
 
 const columns = [
   { field: "id", headerName: "NO", width: "100px" },
@@ -12,26 +12,13 @@ const columns = [
 ];
 
 const Userlist = () => {
-  const [userlist, setUserlist] = useState([]);
-
   const navigate = useNavigate();
 
   const goToSignIn = () => {
     navigate("/signin");
   };
 
-  const getUserlist = async () => {
-    await axios
-      .get(`${process.env.REACT_APP_API_URL}/user/user`)
-      .then((res) => setUserlist(res.data.data))
-      .catch((err) => console.log(err));
-  };
-
-  console.log(userlist);
-
-  useEffect(() => {
-    getUserlist();
-  }, []);
+  const { data: userlist } = useGetUserlistQuery(null);
 
   return (
     <div className="userlist_container">

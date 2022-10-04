@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import "./Myprofile.css";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 import { Button } from "joseph-ui-kit";
+import { useWithdrawUserMutation } from "../../services/user";
 
 const Myprofile = ({ isLogIn, setIsLogIn }) => {
-  const [userId, setUserId] = useState("zxczxc");
+  const [userId, setUserId] = useState("qweqwe");
 
   const navigate = useNavigate();
 
@@ -17,12 +17,11 @@ const Myprofile = ({ isLogIn, setIsLogIn }) => {
     setIsLogIn(false);
     goToSignIn();
   };
+  const [withdrawUser] = useWithdrawUserMutation();
 
   const withdrawMembership = async () => {
-    await axios
-      .delete(`${process.env.REACT_APP_API_URL}/user/userDelete`, {
-        data: { id: userId },
-      })
+    withdrawUser(userId)
+      .unwrap()
       .then(() => {
         alert("정상적으로 탈퇴되었습니다.");
         goToSignIn();

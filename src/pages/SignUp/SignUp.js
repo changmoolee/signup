@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import "./SignUp.css";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 import { TextInput, Button } from "joseph-ui-kit";
+import { useRegisterUserMutation } from "../../services/user";
 
 const SignUp = () => {
   const [userId, setUserId] = useState("");
@@ -19,6 +19,8 @@ const SignUp = () => {
     navigate("/signin");
   };
 
+  const [registerUser] = useRegisterUserMutation();
+
   const handleClickButton = async () => {
     if (userId.length < 4) {
       setWarnUserId("아이디는 4자 이상이어야 합니다.");
@@ -30,11 +32,8 @@ const SignUp = () => {
       setWarnPassword("");
       setWarnConfigPassword("비밀번호가 일치하지 않습니다.");
     } else {
-      await axios
-        .post(`${process.env.REACT_APP_API_URL}/user/userRegister`, {
-          id: userId,
-          password: password,
-        })
+      registerUser({ userId, password })
+        .unwrap()
         .then(() => {
           alert("정상적으로 회원가입이 되었습니다.");
           goToSignIn();
