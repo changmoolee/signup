@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./Userlist.css";
 import { useNavigate } from "react-router-dom";
 import { DataTable, Button } from "joseph-ui-kit";
@@ -14,11 +14,15 @@ const columns = [
 const Userlist = () => {
   const navigate = useNavigate();
 
-  const goToSignIn = () => {
-    navigate("/signin");
+  const goToMain = () => {
+    navigate("/");
   };
 
-  const { data: userlist } = useGetUserlistQuery(null);
+  const { data: userlist, refetch } = useGetUserlistQuery(null);
+
+  useEffect(() => {
+    refetch();
+  }, []);
 
   return (
     <div className="userlist_container">
@@ -28,11 +32,7 @@ const Userlist = () => {
         rows={convertUserlist(userlist)}
       />
       <div className="button_wrapper">
-        <Button
-          name="로그인 페이지로 가기"
-          width="200px"
-          onClick={goToSignIn}
-        />
+        <Button name="로그인 페이지로 가기" width="200px" onClick={goToMain} />
       </div>
     </div>
   );

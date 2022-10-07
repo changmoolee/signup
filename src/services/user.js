@@ -2,10 +2,20 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 export const userApi = createApi({
   reducerPath: "userApi",
-  baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:8000/user" }),
+  baseQuery: fetchBaseQuery({
+    baseUrl: "http://localhost:8000/user",
+    credentials: "include",
+  }),
   endpoints: (builder) => ({
     getUserlist: builder.query({
       query: () => `/user`,
+      transformResponse: (response) => response.data,
+    }),
+    getUserInfo: builder.mutation({
+      query: () => ({
+        url: "/userInfo",
+        method: "POST",
+      }),
       transformResponse: (response) => response.data,
     }),
     loginUser: builder.mutation({
@@ -18,6 +28,13 @@ export const userApi = createApi({
         },
       }),
     }),
+    logoutUser: builder.mutation({
+      query: () => ({
+        url: "/userLogOut",
+        method: "POST",
+        body: {},
+      }),
+    }),
     registerUser: builder.mutation({
       query: ({ userId, password }) => ({
         url: `/userRegister`,
@@ -25,6 +42,17 @@ export const userApi = createApi({
         body: {
           id: userId,
           password: password,
+        },
+      }),
+    }),
+    editUser: builder.mutation({
+      query: ({ userId, prevPassword, newPassword }) => ({
+        url: `/userEdit`,
+        method: "PATCH",
+        body: {
+          id: userId,
+          prevPassword: prevPassword,
+          newPassword: newPassword,
         },
       }),
     }),
@@ -45,4 +73,7 @@ export const {
   useRegisterUserMutation,
   useWithdrawUserMutation,
   useLoginUserMutation,
+  useLogoutUserMutation,
+  useGetUserInfoMutation,
+  useEditUserMutation,
 } = userApi;

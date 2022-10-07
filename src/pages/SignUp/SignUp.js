@@ -15,8 +15,8 @@ const SignUp = () => {
 
   const navigate = useNavigate();
 
-  const goToSignIn = () => {
-    navigate("/signin");
+  const goToMain = () => {
+    navigate("/");
   };
 
   const [registerUser] = useRegisterUserMutation();
@@ -36,11 +36,15 @@ const SignUp = () => {
         .unwrap()
         .then(() => {
           alert("정상적으로 회원가입이 되었습니다.");
-          goToSignIn();
+          goToMain();
         })
         .catch((err) => {
-          alert("회원가입에 실패하였습니다.");
           console.log(err);
+          if (err.data.error === "아이디중복") {
+            alert("이미 존재하는 아이디입니다.");
+          } else {
+            alert("회원가입에 실패하였습니다.");
+          }
         });
     }
   };
@@ -79,7 +83,7 @@ const SignUp = () => {
           kind="secondary"
           name="로그인 페이지로 가기"
           width="200px"
-          onClick={goToSignIn}
+          onClick={goToMain}
         />
       </div>
     </div>
